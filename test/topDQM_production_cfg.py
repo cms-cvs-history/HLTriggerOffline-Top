@@ -80,7 +80,9 @@ process.MessageLogger.categories.append('TopDiLeptonOfflineDQM')
 process.MessageLogger.cerr.TopDiLeptonOfflineDQM = cms.untracked.PSet(limit = cms.untracked.int32(1))
 
 process.MEtoEDMConverter.deleteAfterCopy = cms.untracked.bool(False)  ## line added to avoid crash when changing run number
+
 ## To examin more paths at the same time, clone the module
+process.load("HLTriggerOffline.Top.topHLTDQM_cff")
 process.DiMuonMu17_Mu8 = process.DiMuonDQM.clone()
 process.DiMuonMu17_Mu8.preselection.trigger.select = cms.vstring(['HLT_Mu17_Mu8_v17'])#Only one
 process.DiMuonMu17_Mu8.setup.directory = cms.string("Physics/Top/DiMuonMu17_Mu8/")
@@ -100,16 +102,21 @@ process.ElecMuonMu8Ele17 = process.ElecMuonDQM.clone()
 process.ElecMuonMu8Ele17.preselection.trigger.select = cms.vstring(['HLT_Mu8_Ele17_CaloIdT_CaloIsoVL_TrkIdVL_TrkIsoVL_v7'])#Only one
 process.ElecMuonMu8Ele17.setup.directory = cms.string("Physics/Top/ElecMuonMu8Ele17/")
 
-
+process.topSingleMuonMediumTriggerDQM.preselection.trigger.select = cms.vstring(['HLT_IsoMu17_eta2p1_TriCentralPFNoPUJet50_40_30_v1'])
+process.topSingleElectronMediumTriggerDQM.preselection.trigger.select = cms.vstring(['HLT_Ele25_CaloIdVT_TrkIdT_TriCentralPFNoPUJet50_40_30_v5'])
+#process.SingleTopSingleElectronTriggerDQM.preselection.trigger.select = cms.vstring(['HLT_Ele25_CaloIdVT_CaloIsoT_TrkIdT_TrkIsoT_CentralPFNoPUJet30_BTagIPIter_v6'])
+process.SingleTopSingleMuonTriggerDQM.preselection.trigger.select = cms.vstring(['HLT_IsoMu17_eta2p1_CentralPFNoPUJet30_BTagIPIter_v1'])
+#
 ## add it to the p path below
 
-#process.SingleTopTriggerDQM.preselection.trigger.select = cms.vstring(['HLT_IsoMu17_eta2p1_CentralPFNoPUJet30_BTagIPIter_v1'])
 ## path definitions
 process.p      = cms.Path(
    #process.content *
     process.simpleEleId70cIso          *
-    #process.topSingleMuonMediumTriggerDQM     +
-    #process.SingleTopTriggerDQM
+    process.topSingleMuonMediumTriggerDQM     +
+    process.topSingleElectronMediumTriggerDQM +
+    process.SingleTopSingleMuonTriggerDQM+
+    process.SingleTopSingleElectronTriggerDQM+
     process.DiMuonMu17_Mu8 +
     process.DiMuonMu17_TkMu8 +
     process.DiElectronDQM +
